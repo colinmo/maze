@@ -131,26 +131,26 @@ function getDirection($maze, $x, $y, $max_x, $max_y)
     shuffle($valid_dirs);
     foreach ($valid_dirs as $dir) {
         switch ($dir) {
-        case 'S':
-            if ($y < $max_y - 1 && empty($maze[$x][$y]['S']) && !$maze[$x][$y + 1]['visited']) {
-                return "S";
-            }
-            break;
-        case 'W':
-            if ($x > 0 && empty($maze[$x][$y]['W']) && !$maze[$x - 1][$y]['visited']) {
-                return "W";
-            }
-            break;
-        case 'N':
-            if ($y > 0 && empty($maze[$x][$y - 1]['S']) && !$maze[$x][$y - 1]['visited']) {
-                return "N";
-            }
-            break;
-        case 'E':
-            if ($x < $max_x - 1 && empty($maze[$x + 1][$y]['W']) && !$maze[$x + 1][$y]['visited']) {
-                return "E";
-            }
-            break;
+            case 'S':
+                if ($y < $max_y - 1 && empty($maze[$x][$y]['S']) && !$maze[$x][$y + 1]['visited']) {
+                    return "S";
+                }
+                break;
+            case 'W':
+                if ($x > 0 && empty($maze[$x][$y]['W']) && !$maze[$x - 1][$y]['visited']) {
+                    return "W";
+                }
+                break;
+            case 'N':
+                if ($y > 0 && empty($maze[$x][$y - 1]['S']) && !$maze[$x][$y - 1]['visited']) {
+                    return "N";
+                }
+                break;
+            case 'E':
+                if ($x < $max_x - 1 && empty($maze[$x + 1][$y]['W']) && !$maze[$x + 1][$y]['visited']) {
+                    return "E";
+                }
+                break;
         }
     }
     return '-';
@@ -173,22 +173,22 @@ function getDirection($maze, $x, $y, $max_x, $max_y)
 function makePath(&$maze, &$x, &$y, $direction, &$canpick, &$visited)
 {
     switch ($direction) {
-    case 'S':
-        $maze[$x][$y]['S'] = array($x, $y + 1);
-        $y++;
-        break;
-    case 'W':
-        $maze[$x][$y]['W'] = array($x - 1, $y);
-        $x--;
-        break;
-    case 'N':
-        $maze[$x][$y - 1]['S'] = array($x, $y);
-        $y--;
-        break;
-    default:
-        $maze[$x + 1][$y]['W'] = array($x, $y);
-        $x++;
-        break;
+        case 'S':
+            $maze[$x][$y]['S'] = array($x, $y + 1);
+            $y++;
+            break;
+        case 'W':
+            $maze[$x][$y]['W'] = array($x - 1, $y);
+            $x--;
+            break;
+        case 'N':
+            $maze[$x][$y - 1]['S'] = array($x, $y);
+            $y--;
+            break;
+        default:
+            $maze[$x + 1][$y]['W'] = array($x, $y);
+            $x++;
+            break;
     }
     $maze[$x][$y]['visited'] = true;
     addVisited($canpick, $visited, $x, $y);
