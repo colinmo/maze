@@ -1,0 +1,6 @@
+{
+    "require": {
+        "atoum/atoum": "^3.3",
+        "atoum/stubs": "^2.6"
+    }
+}
