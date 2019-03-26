@@ -21,7 +21,7 @@ class Maze
     private $canpick = array();
     private $maze = array();
 
-    public function __construct($options)
+    public function __construct($options = [])
     {
         $options = (object) $options;
         if (isset($options->x)) {
@@ -30,22 +30,29 @@ class Maze
         if (isset($options->y)) {
             $this->max_y = $options->y;
         }
-        if (isset($options->preset)) {
-            if (in_array($options->preset, ['moo','prof'])) {
-                $this->max_x = 61;
-                $this->max_y = 24;
-            }
+        if (isset($options->preset) && in_array($options->preset, ['moo','prof'])) {
+            $this->max_x = 61;
+            $this->max_y = 24;
         }
+    }
+
+    /**
+     * Create the maze array
+     *
+     * @return void
+     */
+    public function createMaze()
+    {
         $this->maze = $this->makeMap();
-        $cursquare_x = mt_rand(0, count($maze) - 1);
-        $cursquare_y = mt_rand(0, count($maze[$cursquare_x]) - 1);
+        $cursquare_x = mt_rand(0, count($this->maze) - 1);
+        $cursquare_y = mt_rand(0, count($this->maze[$cursquare_x]) - 1);
 
         $this->maze[$cursquare_x][$cursquare_y]['visited'] = true;
-        $visited[] = array("X" => $cursquare_x, 'Y' => $cursquare_y);
+        $this->visited[] = array("X" => $cursquare_x, 'Y' => $cursquare_y);
         $this->canpick[] = array("X" => $cursquare_x, 'Y' => $cursquare_y);
 
-        $total_to_visit = $max_x * $max_y;
-        while (count($visited) < $total_to_visit) {
+        $total_to_visit = $this->max_x * $this->max_y;
+        while (count($this->visited) < $total_to_visit) {
             $direction = $this->getDirection($cursquare_x, $cursquare_y);
             while ($direction == '-') {
                 list($cursquare_x, $cursquare_y) = $this->getLegal();
@@ -55,7 +62,11 @@ class Maze
         }
 
         $this->maze[0][0]['W'] = 1;
-        $this->drawMaze();
+    }
+
+    public function getMaxX()
+    {
+        return $this->max_x;
     }
 
     /**
@@ -85,7 +96,7 @@ class Maze
     {
         while (1) {
             $me = array_rand($this->canpick, 1);
-            $direction = getDirection(
+            $direction = $this->getDirection(
                 $this->canpick[$me]['X'],
                 $this->canpick[$me]['Y']
             );
@@ -122,6 +133,7 @@ class Maze
      */
     private function validDirection($x, $y, $direction)
     {
+        $return = '-';
         switch ($direction) {
             case 'S':
                 if ($y < $this->max_y - 1 && empty($this->maze[$x][$y]['S']) && !$this->maze[$x][$y + 1]['visited']) {
@@ -209,28 +221,29 @@ class Maze
      *
      * @return void
      */
-    private function drawMaze()
+    public function drawMazeSVG()
     {
-        $line_template = '<line x1="%1$d" y1="%1$d" x2="%1$d" y2="%1$d" style="stroke:rgb(255,0,0);stroke-width:2" />' . chr(13);
-        header('Content-type: image/svg+xml');
+        $output = "";
+        $line_template = '<line x1="%1$d" y1="%2$d" x2="%3$d" y2="%4$d" />' . "\n";
         $buffer = 2;
-        echo '<?xml version="1.0" standalone="no">';
-        echo '<svg xmlns="http://www.w3.org/2000/svg" height="' . ($this->max_y * 20 + $buffer * 2) . '" width="' . ($this->max_x * 20 + $buffer * 2) . '">'
-        . sprintf($line_template, 2, 1, $this->max_x * 20 + $buffer + 1, 1)
-        . sprintf($line_template, $this->max_x * 20 + $buffer, 1, $this->max_x * 20 + $buffer, ($this->max_y - 1) * 20);
+        $output .= '<?xml version="1.0" standalone="no">' . "\n";
+        $output .= '<svg xmlns="http://www.w3.org/2000/svg" height="' . ($this->max_y * 20 + $buffer * 2) . '" width="' . ($this->max_x * 20 + $buffer * 2) . '">' . "\n"
+        . "<style>line { stroke: rgb(255,0,0); stroke-width: 2; }</style>\n"
+        . sprintf($line_template, 2, 1, $this->max_x * 20 + $buffer + 1, 1) . "\n"
+        . sprintf($line_template, $this->max_x * 20 + $buffer, 1, $this->max_x * 20 + $buffer, ($this->max_y - 1) * 20) . "\n";
         foreach (range(0, $this->max_y - 1) as $y) {
             foreach (range(0, $this->max_x - 1) as $x) {
                 $done = $this->maze[$x][$y];
                 if (empty($done['W'])) {
-                    echo sprintf($line_template, $x * 20 + $buffer, ($y) * 20, $x * 20 + $buffer, ($y + 1) * 20 + 1);
+                    $output .= sprintf($line_template, $x * 20 + $buffer, ($y) * 20, $x * 20 + $buffer, ($y + 1) * 20 + 1);
                 } else {
-                    echo sprintf($line_template, $x * 20 + $buffer, ($y + 1) * 20 - 1, $x * 20 + $buffer, ($y + 1) * 20 + 1);
+                    $output .= sprintf($line_template, $x * 20 + $buffer, ($y + 1) * 20 - 1, $x * 20 + $buffer, ($y + 1) * 20 + 1);
                 }
                 if (empty($done['S'])) {
-                    echo sprintf($line_template, $x * 20 + $buffer, ($y + 1) * 20, ($x + 1) * 20 + $buffer, ($y + 1) * 20);
+                    $output .= sprintf($line_template, $x * 20 + $buffer, ($y + 1) * 20, ($x + 1) * 20 + $buffer, ($y + 1) * 20);
                 }
             }
         }
-        echo chr(13) . '</svg>';
+        return $output . chr(13) . '</svg>';
     }
 }
