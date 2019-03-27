@@ -11,7 +11,7 @@
  * @license   https://en.wikipedia.org/wiki/FreeBSD_Documentation_License FreeBSD
  * @link      https://vonexplaino.com/code/maze
  */
-namespace VonExplaino;
+namespace colinmo;
 
 class Maze
 {
@@ -62,6 +62,8 @@ class Maze
         }
 
         $this->maze[0][0]['W'] = 1;
+
+        return $this;
     }
 
     public function getMaxX()

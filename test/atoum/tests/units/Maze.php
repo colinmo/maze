@@ -2,11 +2,11 @@
 /**
  * Test suite
  */
-namespace VonExplaino\tests\units;
+namespace colinmo\tests\units;
 
 include __DIR__ . '/../../../../src/Maze.php';
 
-use VonExplaino\Maze as Entity;
+use colinmo\Maze as Entity;
 use atoum;
 
 class Maze extends atoum
