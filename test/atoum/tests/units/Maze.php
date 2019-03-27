@@ -25,7 +25,7 @@ class Maze extends atoum
     public function testSizes()
     {
         $this
-            ->given($entity = new Entity([]))
+            ->given($entity = new Entity(['x' => 20, 'y'=> 20]))
             ->when($entity->createMaze())
             ->and($count = substr_count($entity->drawMazeSVG(), '<line'))
             ->dump($entity->drawMazeSVG())

@@ -228,7 +228,7 @@ class Maze
         $buffer = 2;
         $output .= '<?xml version="1.0" standalone="no">' . "\n";
         $output .= '<svg xmlns="http://www.w3.org/2000/svg" height="' . ($this->max_y * 20 + $buffer * 2) . '" width="' . ($this->max_x * 20 + $buffer * 2) . '">' . "\n"
-        . "<style>line { stroke: rgb(255,0,0); stroke-width: 2; }</style>\n"
+        . "<style>line { stroke: #532109; stroke-width: 3; }</style>\n"
         . sprintf($line_template, 2, 1, $this->max_x * 20 + $buffer + 1, 1) . "\n"
         . sprintf($line_template, $this->max_x * 20 + $buffer, 1, $this->max_x * 20 + $buffer, ($this->max_y - 1) * 20) . "\n";
         foreach (range(0, $this->max_y - 1) as $y) {
