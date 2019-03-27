@@ -2,7 +2,7 @@
     "name": "colinmo/maze",
     "description": "Uses a standard algorithm to make a one-solution maze of various sizes",
     "require": {
-        "php": "^5.2"
+        "php": ">=5.2"
     },
     "require-dev": {
         "atoum/atoum": "^3.3",
