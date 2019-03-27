@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Test suite
+ */
 namespace VonExplaino\tests\units;
 
 include __DIR__ . '/../../../../src/Maze.php';
