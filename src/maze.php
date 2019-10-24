@@ -39,7 +39,7 @@ class Maze
     /**
      * Create the maze array
      *
-     * @return void
+     * @return Maze
      */
     public function createMaze()
     {
@@ -66,6 +66,11 @@ class Maze
         return $this;
     }
 
+    /**
+     * Max X
+     *
+     * @return integer
+     */
     public function getMaxX()
     {
         return $this->max_x;
@@ -221,7 +226,7 @@ class Maze
     /**
      * Draw the maze by creating a SVG. This is output to STDOUT.
      *
-     * @return void
+     * @return string
      */
     public function drawMazeSVG()
     {
